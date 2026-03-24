@@ -1,0 +1,58 @@
+# --- STEP 1: LOAD THE TOOLS ---
+# We need pandas for the data table and seaborn/matplotlib for the "pretty" charts.
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+# --- STEP 2: GET THE DATA ---
+# If you have your own file, you would use: df = pd.read_csv('your_file.name.csv')
+# For now, let's just make a quick dataset about "Product Sales" so the code runs immediately.
+
+data = {
+    'Product_ID': range(101, 201),
+    'Price_USD': np.random.uniform(10, 500, 100),
+    'Units_Sold': np.random.randint(1, 50, 100),
+    'Customer_Rating': np.random.uniform(1, 5, 100),
+    'Category': np.random.choice(['Electronics', 'Clothing', 'Home', 'Toys'], 100)
+}
+
+df = pd.DataFrame(data)
+
+# Let's peek at the first 5 rows to make sure it loaded correctly
+print("--- Data Preview ---")
+print(df.head())
+print("\n")
+
+# --- STEP 3: THE STATS ---
+# This is the "Descriptive Statistics" part. 
+# It gives us the mean, min, max, and standard deviation for everything.
+print("--- Summary Statistics ---")
+stats_summary = df.describe()
+print(stats_summary)
+
+# --- STEP 4: VISUALIZATION TIME ---
+# I'll create a figure with a few different plots to show the data from different angles.
+
+# Setting the style to make it look cleaner
+sns.set_theme(style="whitegrid")
+
+# 1. Histogram: To see the distribution of Prices
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Price_USD'], bins=20, kde=True, color='teal')
+plt.title('How much do our products cost? (Price Distribution)')
+plt.xlabel('Price in USD')
+plt.ylabel('Number of Products')
+plt.show()
+
+# 2. Boxplot: To see ratings across different categories
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='Category', y='Customer_Rating', data=df, palette='Set3')
+plt.title('Customer Ratings by Category')
+plt.show()
+
+# 3. Scatter Plot: To see if Price affects Units Sold
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='Price_USD', y='Units_Sold', data=df, hue='Category', style='Category', s=100)
+plt.title('Does Price impact how many units we sell?')
+plt.show()
